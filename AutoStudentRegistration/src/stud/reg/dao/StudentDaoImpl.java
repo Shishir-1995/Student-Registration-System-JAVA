@@ -22,7 +22,7 @@ public class StudentDaoImpl implements StudentDao{
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps =  con.prepareStatement("INSERT INTO Student(name,gender,email,password) VALUES ?,?,?,?");
+			PreparedStatement ps =  con.prepareStatement("INSERT INTO student(name,gender,email,password) VALUES (?,?,?,?)");
 			ps.setString(1, student.getName());
 			ps.setString(2, student.getGender());
 			ps.setString(3, student.getEmail());
@@ -53,10 +53,10 @@ public class StudentDaoImpl implements StudentDao{
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps = con.prepareStatement("UPDATE Student set ?=? WHERE roll = ?");
-			ps.setString(1, field);
-			ps.setString(2, newData);
-			ps.setInt(3, roll);
+			PreparedStatement ps = con.prepareStatement("UPDATE student set "+field+"=? WHERE roll = ?");
+			ps.setString(1, newData); 
+//			ps.setString(2, newData);
+			ps.setInt(2, roll);
 			
 			int res = ps.executeUpdate();
 			
@@ -82,7 +82,7 @@ public class StudentDaoImpl implements StudentDao{
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps =  con.prepareStatement("SELECT * FROM Course");
+			PreparedStatement ps =  con.prepareStatement("SELECT * FROM course");
 			
 			ResultSet rs = ps.executeQuery();
 			

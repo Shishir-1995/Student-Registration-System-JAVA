@@ -8,32 +8,21 @@ public class DBUtil {
 
 	public static Connection establishConnection() {
 		
-		Connection conn = null;
 		try {
-			Class.forName("com.mysql.cj.Driver");			
+			Class.forName("com.mysql.cj.jdbc.Driver");			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
+		Connection conn = null;
 		
-		try {
-			
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Stud_Reg","root","admin");
+		try { 
+			conn  = DriverManager.getConnection("jdbc:mysql://localhost:3306/stud_reg","root","admin");
 			
 		} 
 		catch (SQLException e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
-			
-		}
-		finally {
-			
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 		}
 		

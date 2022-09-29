@@ -5,18 +5,19 @@ import java.util.List;
 import stud.reg.bean.Admin;
 import stud.reg.bean.Course;
 import stud.reg.bean.Student;
+import stud.reg.exception.AdminException;
 
 public interface AdminDao {
 
-	String adminRegistration(Admin admin);
+	String adminRegistration(Admin admin) throws AdminException;
 	
-	String addCourse(Course course);
+	String addCourse(Course course) throws AdminException;
 	
-	String deleteCourse(int cid);
+	String deleteCourse(int cid) throws AdminException;
 	
-	Course searchCourse(int cid);
+	Course searchCourse(int cid) throws AdminException;
 	
-	String addStudentToCourse(int roll, int cid);
+	String addStudentToCourse(int roll, int cid) throws AdminException;
 	
-	List<Student> showStudent();
+	List<Student> showStudent() throws AdminException;
 }
