@@ -1,0 +1,36 @@
+CREATE TABLE Student(
+roll int PRIMARY KEY auto_increment,
+name varchar(16) NOT NULL,
+gender varchar(1) NOT NULL,
+email varchar(24) NOT NULL UNIQUE,
+password varchar(16) NOT NULL
+);
+
+CREATE TABLE Admin(
+admin_id int PRIMARY KEY auto_increment,
+a_name varchar(16) NOT NULL,
+a_user varchar(24) NOT NULL UNIQUE,
+a_pass varchar(24) NOT NULL
+);
+
+CREATE TABLE Course(
+c_id int PRIMARY KEY auto_increment,
+c_name varchar(24) NOT NULL UNIQUE,
+fee int NOT NULL,
+seats int NOT NULL
+);
+
+CREATE TABLE student_course(
+roll int UNIQUE,
+cid int UNIQUE,
+FOREIGN KEY (roll) references Student(roll),
+FOREIGN KEY (cid) references Course(c_id)
+);
+
+CREATE TABLE Batch(
+bid int PRIMARY KEY,
+cid int UNIQUE,
+roll int UNIQUE,
+FOREIGN KEY (cid) references Course(c_id),
+FOREIGN KEY (roll) references Student(roll)
+);
