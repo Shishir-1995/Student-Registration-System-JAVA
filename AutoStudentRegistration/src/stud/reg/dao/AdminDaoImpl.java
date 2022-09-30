@@ -212,7 +212,41 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public String addStudentToBatch(int roll, int bid) throws AdminException {
 		// TODO Auto-generated method stub
-		return null;
+		String message = null;
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM student WHERE roll = ?");
+			ps.setInt(1, roll);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				
+				PreparedStatement ps2 =  conn.prepareStatement("SELECT * FROM batch WHERE bid = ?");
+				ps2.setInt(1, bid);
+				
+				ResultSet rs2 = ps2.executeQuery();
+				
+				if(rs2.next()) {
+					
+					conn.prepareStatement("SELECT ");
+					
+				}else {
+					throw new AdminException("Batch Error !");
+				}
+				
+			}else {
+				throw new AdminException("Student Error !");
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return message;
 	}
 
 	@Override
