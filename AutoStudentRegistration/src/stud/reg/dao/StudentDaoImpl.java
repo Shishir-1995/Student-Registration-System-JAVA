@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import stud.reg.bean.Course;
+import stud.reg.bean.CoursesDTO;
 import stud.reg.bean.Student;
 import stud.reg.exception.StudentException;
 import stud.reg.util.DBUtil;
@@ -61,9 +61,6 @@ public class StudentDaoImpl implements StudentDao{
 			}else {
 				throw new StudentException("Course ID Error.");
 			}
-			
-			
-			
 
 		}
 		catch(SQLException e) {
@@ -105,13 +102,14 @@ public class StudentDaoImpl implements StudentDao{
 	}
 
 	@Override
-	public List<Course> showAllCourseDetails() throws StudentException {
+	public List<CoursesDTO> showAllCourseDetails() throws StudentException {
 		// TODO Auto-generated method stub
-		List<Course> courses = new ArrayList<>();
+		List<CoursesDTO> courses = new ArrayList<>();
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps =  con.prepareStatement("SELECT * FROM course");
+			PreparedStatement ps =  con.prepareStatement("SELECT c.c_name,sum(b.seats) FROM batch b "
+					+ "INNER JOIN course c ON c.c_id = b.cid GROUP BY c.c_id");
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -119,25 +117,23 @@ public class StudentDaoImpl implements StudentDao{
 			
 			while(rs.next()) {
 				
-				int cid = rs.getInt("c_id");
-				String cname = rs.getString("c_name");
-				int fee = rs.getInt("fee");
+				String name = rs.getString(1);
+				int totalFees = rs.getInt(2);
+				
 				flag = false;
 				
-				courses.add( new Course(cid, cname,fee));
+				CoursesDTO course = new CoursesDTO(name, totalFees);
+				
+				courses.add(course);
 			}
 			
 			if(flag) throw new StudentException("No course Found");
-			
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
 		return courses;
 	}
 

@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import stud.reg.bean.Admin;
 import stud.reg.bean.Batch;
 import stud.reg.bean.Course;
+import stud.reg.bean.CourseDTO;
 import stud.reg.bean.Student;
 import stud.reg.exception.AdminException;
 import stud.reg.util.DBUtil;
@@ -97,31 +99,59 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
-	public Course searchCourse(int cid) throws AdminException {
+	public List<CourseDTO> searchCourse(int cid) throws AdminException {
 
-		Course course = null;
+		List<CourseDTO> courses = new ArrayList<>();
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM course WHERE c_id = ?");
-			ps.setInt(1, cid);
 			
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				int c_id = rs.getInt("c_id");
-				String name = rs.getString("c_name");
-				int fee = rs.getInt("fee");
+			PreparedStatement p = con.prepareStatement("SELECT * FROM course WHERE c_id = ?");
+			p.setInt(1, cid);
+			
+			ResultSet r = p.executeQuery();
+			
+			if(r.next()){
+			
+				PreparedStatement ps = con.prepareStatement("SELECT b.seats,b.bname,c.c_name,c.fee,c.c_id "
+															+ "FROM batch b INNER JOIN course c "
+															+ "ON b.cid = c.c_id AND c.c_id= (?);");
+				ps.setInt(1, cid);
 				
-				course = new Course(c_id,name,fee);
+				ResultSet rs = ps.executeQuery();
 				
-			}else throw new AdminException("Course Not Found");
+				boolean flag = true;
+				
+				while(rs.next()) {
+					
+					flag = false;
+					int seats = rs.getInt("b.seats");
+					String bname = rs.getString("b.bname");
+					String cname = rs.getString("c.c_name");
+					int fee = rs.getInt("c.fee");
+					int c_id = rs.getInt("c.c_id");
+					
+					CourseDTO course = new CourseDTO(c_id,cname,bname,fee,seats);
+					
+					courses.add(course);
+				}
+				
+				if(flag) throw new AdminException("No Data Found! ");
+			
+			}
+			else {
+			
+				throw new AdminException("Course ID Error !");
+				
+			}
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			throw new AdminException(e.getMessage());
 		}
 
-		return course;
+		return courses;
 	}
 
 	@Override

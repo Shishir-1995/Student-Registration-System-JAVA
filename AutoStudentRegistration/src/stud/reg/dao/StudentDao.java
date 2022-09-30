@@ -3,6 +3,7 @@ package stud.reg.dao;
 import java.util.List;
 
 import stud.reg.bean.Course;
+import stud.reg.bean.CoursesDTO;
 import stud.reg.bean.Student;
 import stud.reg.exception.StudentException;
 
@@ -13,7 +14,7 @@ public interface StudentDao {
 	
 	String updateDetails(int roll, String field, String newData) throws StudentException;
 	
-	List<Course> showAllCourseDetails() throws StudentException;
+	List<CoursesDTO> showAllCourseDetails() throws StudentException;
 	
 	
 }

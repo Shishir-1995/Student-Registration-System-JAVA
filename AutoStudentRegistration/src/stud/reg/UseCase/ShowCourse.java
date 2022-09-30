@@ -3,7 +3,7 @@ package stud.reg.UseCase;
 import java.util.ArrayList;
 import java.util.List;
 
-import stud.reg.bean.Course;
+import stud.reg.bean.CoursesDTO;
 import stud.reg.dao.StudentDao;
 import stud.reg.dao.StudentDaoImpl;
 import stud.reg.exception.StudentException;
@@ -15,7 +15,7 @@ public class ShowCourse {
 		
 		StudentDao sd = new StudentDaoImpl();
 		
-		List<Course> courses = new ArrayList<>();
+		List<CoursesDTO> courses = new ArrayList<>();
 		
 		try {
 			courses = sd.showAllCourseDetails();
@@ -23,7 +23,7 @@ public class ShowCourse {
 			if(courses.size() == 0) {
 				System.out.println("No course to Show.");
 			}else {
-				for(Course c: courses) {
+				for(CoursesDTO c: courses) {
 					System.out.println(c);
 					System.out.println("------------------------");
 				}
