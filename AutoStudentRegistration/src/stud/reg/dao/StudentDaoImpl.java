@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import stud.reg.bean.Course;
+import stud.reg.bean.CoursesDTO;
 import stud.reg.bean.Student;
 import stud.reg.exception.StudentException;
 import stud.reg.util.DBUtil;
@@ -15,25 +15,51 @@ import stud.reg.util.DBUtil;
 public class StudentDaoImpl implements StudentDao{
 
 	@Override
-	public String studentRegistration(Student student) throws StudentException {
+	public String studentRegistration(Student student, int cid) throws StudentException {
 		// TODO Auto-generated method stub
 		
 		String message = null;
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps =  con.prepareStatement("INSERT INTO Student(name,gender,email,password) VALUES ?,?,?,?");
+			PreparedStatement ps =  con.prepareStatement("INSERT INTO student(name,gender,email,password) VALUES (?,?,?,?)");
 			ps.setString(1, student.getName());
 			ps.setString(2, student.getGender());
 			ps.setString(3, student.getEmail());
 			ps.setString(4, student.getPassword());
 			
-			int res = ps.executeUpdate();
+			ps.executeUpdate();
 			
-			if(res > 0) {
-				message = "Registration successfull";
+			PreparedStatement ps2 = con.prepareStatement("SELECT * FROM course WHERE c_id = ?");
+			ps2.setInt(1, cid);
+			
+			ResultSet rs = ps2.executeQuery();
+			
+			if(rs.next()) {
+				
+				String email = student.getEmail();
+				System.out.println(email);
+				
+				PreparedStatement ps3 = con.prepareStatement("SELECT roll FROM student WHERE email = ?");
+				ps3.setString(1, email);
+				
+				ResultSet rs2 = ps3.executeQuery();
+				rs2.next();
+				int roll = rs2.getInt("roll");
+				
+				PreparedStatement ps4 = con.prepareStatement("INSERT INTO student_course VALUES (?,?)");
+				ps4.setInt(1, roll);
+				ps4.setInt(2, cid);
+				
+				int res = ps4.executeUpdate();
+				if(res > 0) {
+					message = "Registration successfull";
+				}else {
+					throw new StudentException("Error in Registration");
+				}
+				
 			}else {
-				throw new StudentException("Error in Registration");
+				throw new StudentException("Course ID Error.");
 			}
 
 		}
@@ -53,10 +79,10 @@ public class StudentDaoImpl implements StudentDao{
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps = con.prepareStatement("UPDATE Student set ?=? WHERE roll = ?");
-			ps.setString(1, field);
-			ps.setString(2, newData);
-			ps.setInt(3, roll);
+			PreparedStatement ps = con.prepareStatement("UPDATE student set "+field+"=? WHERE roll = ?");
+			ps.setString(1, newData); 
+//			ps.setString(2, newData);
+			ps.setInt(2, roll);
 			
 			int res = ps.executeUpdate();
 			
@@ -76,13 +102,14 @@ public class StudentDaoImpl implements StudentDao{
 	}
 
 	@Override
-	public List<Course> showCourseDetails() throws StudentException{
+	public List<CoursesDTO> showAllCourseDetails() throws StudentException {
 		// TODO Auto-generated method stub
-		List<Course> courses = new ArrayList<>();
+		List<CoursesDTO> courses = new ArrayList<>();
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps =  con.prepareStatement("SELECT * FROM Course");
+			PreparedStatement ps =  con.prepareStatement("SELECT c.c_name,sum(b.seats) FROM batch b "
+					+ "INNER JOIN course c ON c.c_id = b.cid GROUP BY c.c_id");
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -90,26 +117,23 @@ public class StudentDaoImpl implements StudentDao{
 			
 			while(rs.next()) {
 				
-				int cid = rs.getInt("c_id");
-				String cname = rs.getString("c_name");
-				int fee = rs.getInt("fee");
-				int seats = rs.getInt("seats");
+				String name = rs.getString(1);
+				int totalFees = rs.getInt(2);
+				
 				flag = false;
 				
-				courses.add( new Course(cid, cname,fee,seats));
+				CoursesDTO course = new CoursesDTO(name, totalFees);
+				
+				courses.add(course);
 			}
 			
 			if(flag) throw new StudentException("No course Found");
-			
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
 		return courses;
 	}
 

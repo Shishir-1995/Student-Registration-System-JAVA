@@ -20,17 +20,25 @@ fee int NOT NULL,
 seats int NOT NULL
 );
 
-CREATE TABLE student_course(
-roll int UNIQUE,
-cid int UNIQUE,
-FOREIGN KEY (roll) references Student(roll),
-FOREIGN KEY (cid) references Course(c_id)
-);
-
 CREATE TABLE Batch(
 bid int PRIMARY KEY,
-cid int UNIQUE,
-roll int UNIQUE,
-FOREIGN KEY (cid) references Course(c_id),
-FOREIGN KEY (roll) references Student(roll)
+bname varchar(12),
+duration int,
+cid int,
+seats int NOT NULL,
+FOREIGN KEY (cid) references Course(c_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE student_batch(
+roll int,
+bid int,
+FOREIGN KEY (bid) references Batch(bid) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (roll) references Student(roll) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE student_course(
+roll int,
+cid int,
+FOREIGN KEY (cid) references Course(c_id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (roll) references Student(roll) ON DELETE CASCADE ON UPDATE CASCADE
 );
