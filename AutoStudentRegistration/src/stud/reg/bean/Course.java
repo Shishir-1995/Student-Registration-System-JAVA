@@ -5,18 +5,16 @@ public class Course {
 	private int cid;
 	private String cname;
 	private int fee;
-	private int seats;
 	
 	public Course() {}
 	
 	
 
-	public Course(int cid, String cname, int fee, int seats) {
+	public Course(int cid, String cname, int fee) {
 		super();
 		this.cid = cid;
 		this.cname = cname;
 		this.fee = fee;
-		this.seats = seats;
 	}
 
 
@@ -45,19 +43,12 @@ public class Course {
 		this.fee = fee;
 	}
 
-	public int getSeats() {
-		return seats;
-	}
-
-	public void setSeats(int seats) {
-		this.seats = seats;
-	}
 
 
 
 	@Override
 	public String toString() {
-		return "Course id : "+cid+"\nCourse name : "+cname+"\nCourse fee : "+fee+"\nCourse seats : "+seats;
+		return "Course id : "+cid+"\nCourse name : "+cname+"\nCourse fee : "+fee;
 	}
 	
 	

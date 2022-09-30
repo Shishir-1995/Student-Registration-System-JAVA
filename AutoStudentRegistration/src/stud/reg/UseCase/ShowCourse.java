@@ -18,13 +18,14 @@ public class ShowCourse {
 		List<Course> courses = new ArrayList<>();
 		
 		try {
-			courses = sd.showCourseDetails();
+			courses = sd.showAllCourseDetails();
 			
 			if(courses.size() == 0) {
 				System.out.println("No course to Show.");
 			}else {
 				for(Course c: courses) {
 					System.out.println(c);
+					System.out.println("------------------------");
 				}
 			}
 		} catch (StudentException e) {

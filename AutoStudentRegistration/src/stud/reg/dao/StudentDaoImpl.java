@@ -15,7 +15,7 @@ import stud.reg.util.DBUtil;
 public class StudentDaoImpl implements StudentDao{
 
 	@Override
-	public String studentRegistration(Student student) throws StudentException {
+	public String studentRegistration(Student student, int cid) throws StudentException {
 		// TODO Auto-generated method stub
 		
 		String message = null;
@@ -28,13 +28,42 @@ public class StudentDaoImpl implements StudentDao{
 			ps.setString(3, student.getEmail());
 			ps.setString(4, student.getPassword());
 			
-			int res = ps.executeUpdate();
+			ps.executeUpdate();
 			
-			if(res > 0) {
-				message = "Registration successfull";
+			PreparedStatement ps2 = con.prepareStatement("SELECT * FROM course WHERE c_id = ?");
+			ps2.setInt(1, cid);
+			
+			ResultSet rs = ps2.executeQuery();
+			
+			if(rs.next()) {
+				
+				String email = student.getEmail();
+				System.out.println(email);
+				
+				PreparedStatement ps3 = con.prepareStatement("SELECT roll FROM student WHERE email = ?");
+				ps3.setString(1, email);
+				
+				ResultSet rs2 = ps3.executeQuery();
+				rs2.next();
+				int roll = rs2.getInt("roll");
+				
+				PreparedStatement ps4 = con.prepareStatement("INSERT INTO student_course VALUES (?,?)");
+				ps4.setInt(1, roll);
+				ps4.setInt(2, cid);
+				
+				int res = ps4.executeUpdate();
+				if(res > 0) {
+					message = "Registration successfull";
+				}else {
+					throw new StudentException("Error in Registration");
+				}
+				
 			}else {
-				throw new StudentException("Error in Registration");
+				throw new StudentException("Course ID Error.");
 			}
+			
+			
+			
 
 		}
 		catch(SQLException e) {
@@ -76,7 +105,7 @@ public class StudentDaoImpl implements StudentDao{
 	}
 
 	@Override
-	public List<Course> showCourseDetails() throws StudentException{
+	public List<Course> showAllCourseDetails() throws StudentException {
 		// TODO Auto-generated method stub
 		List<Course> courses = new ArrayList<>();
 		
@@ -93,10 +122,9 @@ public class StudentDaoImpl implements StudentDao{
 				int cid = rs.getInt("c_id");
 				String cname = rs.getString("c_name");
 				int fee = rs.getInt("fee");
-				int seats = rs.getInt("seats");
 				flag = false;
 				
-				courses.add( new Course(cid, cname,fee,seats));
+				courses.add( new Course(cid, cname,fee));
 			}
 			
 			if(flag) throw new StudentException("No course Found");

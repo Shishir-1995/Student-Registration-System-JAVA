@@ -30,6 +30,9 @@ public class RegisterStudent {
 		System.out.println("Enter Password : ");
 		String password = sc.next();
 		
+		System.out.println("Enter Course ID :");
+		int cid = sc.nextInt();
+		
 		student.setName(name);
 		student.setGender(gender);
 		student.setEmail(email);
@@ -38,7 +41,7 @@ public class RegisterStudent {
 		StudentDao sd = new StudentDaoImpl();
 		try {
 			
-			System.out.println(sd.studentRegistration(student));
+			System.out.println(sd.studentRegistration(student, cid));
 			
 		} 
 		catch (StudentException e) {

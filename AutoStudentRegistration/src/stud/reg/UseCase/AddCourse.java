@@ -23,13 +23,9 @@ public class AddCourse {
 		System.out.println("Course Fee : ");
 		int fee = sc.nextInt();
 		
-		System.out.println("Course Seats : ");
-		int seats = sc.nextInt();
-		
 		Course course = new Course();
 		course.setCname(name);
 		course.setFee(fee);
-		course.setSeats(seats);
 		
 		AdminDao ad = new AdminDaoImpl();
 		
