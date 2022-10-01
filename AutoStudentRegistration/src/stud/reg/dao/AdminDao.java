@@ -7,6 +7,7 @@ import stud.reg.bean.Batch;
 import stud.reg.bean.Course;
 import stud.reg.bean.CourseDTO;
 import stud.reg.bean.Student;
+import stud.reg.bean.StudentDTO;
 import stud.reg.exception.AdminException;
 
 public interface AdminDao {
@@ -27,7 +28,9 @@ public interface AdminDao {
 	
 	String updateSeatsOfBatch(int bid, int newSeats) throws AdminException;
 	
-	List<Student> showAllStudent() throws AdminException;
+	List<StudentDTO> showAllStudent() throws AdminException;
 	
 	Admin login(String username, String password) throws AdminException;
+	
+	List<Student> studentList() throws AdminException;
 }
