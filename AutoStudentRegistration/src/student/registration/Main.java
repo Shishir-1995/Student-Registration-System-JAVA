@@ -2,6 +2,7 @@ package student.registration;
 
 import java.util.Scanner;
 
+import stud.reg.UseCase.AdminMenu;
 import stud.reg.UseCase.StudentMenu;
 
 public class Main {
@@ -90,12 +91,87 @@ public class Main {
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit The Application");
 		
+		AdminMenu am = new AdminMenu();
+		
 		try {
+			int option = sc.nextInt();
+			switch(option) {
+			case 0: menu();
+				break;
+			case 1: am.register();
+				adminAuth();
+				break;
+			case 2: am.login();
+				adminActivity();
+				break;
+			case 99 :
+				System.out.println("Thank you for using Application");
+				break;
+			default : 
+				System.out.println("Invalid Selection ");
+				adminAuth();
+			}
 			
 		}catch(Exception e) {
 			System.out.println("Invalid Selection !");
 			adminAuth();
 		}
+	}
+	
+	public static void adminActivity() {
+		
+		System.out.println("PLEASE SELECT FROM THE FOLLOWING OPTIONS ");
+		
+		System.out.println("1. Add new Course");
+		System.out.println("2. Update Fees of Course");
+		System.out.println("3. Delete Course");
+		System.out.println("4. Search Course");
+		System.out.println("5. Create Batch");
+		System.out.println("6. Add Student in Batch");
+		System.out.println("7. Update Seats in Batch");
+		System.out.println("8. View Student in Batch");
+		System.out.println("9. View All Student List");
+		System.out.println("\n\n");
+		System.out.println("0. Go Back");
+		System.out.println("99. Exit The Application");
+		
+		AdminMenu am = new AdminMenu();
+		try {
+			
+			int option = sc.nextInt();
+			switch(option) {
+				case 0 : adminAuth();
+					break;
+				case 1 : am.addCourse();
+					adminActivity();
+					break;
+				case 2:
+					am.updateFee();
+					adminActivity();
+					break;
+				case 3:
+					am.deleteCourse();
+					adminActivity();
+					break;
+				case 4:am.searchCourse(); adminActivity(); break;
+				case 5:am.addBatchToCourse(); adminActivity(); break;
+				case 6:am.addStudentToBatch(); adminActivity(); break;
+				case 7:am.updateSeats(); adminActivity(); break;
+				case 8:am.allStudentInBatch(); adminActivity(); break;
+				case 9:am.studentList(); adminActivity(); break;
+				case 99:
+					System.out.println("Thank you for using Application");
+					break;
+				default:System.out.println("Invalid Selection !");
+					adminActivity();
+			}
+			
+			
+		}catch(Exception e) {
+			System.out.println("Invalid Exception");
+			adminActivity();
+		}
+		
 	}
 	
 	public static void menu() {

@@ -269,5 +269,27 @@ public class AdminMenu {
 		
 	}
 	
+	public void login() {
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Enter Username : ");
+		String userName = sc.next();
+		
+		System.out.println("Enter Password : ");
+		String password = sc.next();
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			Admin admin = ad.login(userName, password);
+			
+			System.out.println(admin);
+			
+		}catch(AdminException e){
+			
+			System.out.println(e.getMessage());
+		}
+	}
 	
 }
