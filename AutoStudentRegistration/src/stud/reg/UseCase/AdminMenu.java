@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import stud.reg.bean.Admin;
+import stud.reg.bean.Batch;
 import stud.reg.bean.Course;
 import stud.reg.bean.CourseDTO;
+import stud.reg.bean.Student;
+import stud.reg.bean.StudentDTO;
 import stud.reg.dao.AdminDao;
 import stud.reg.dao.AdminDaoImpl;
 import stud.reg.exception.AdminException;
@@ -139,4 +142,132 @@ public class AdminMenu {
 		
 	}
 
+	public void addBatchToCourse() {
+
+		
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Enter New Batch Details ");
+		System.out.println("--------------------------");
+		
+		System.out.println("Enter the Course ID of the batch : ");
+		int cid = sc.nextInt();
+		
+		System.out.println("Enter the Batch ID (Must be Unique) : ");
+		int bid = sc.nextInt();
+		
+		System.out.println("Enter the batch name : ");
+		String bname = sc.next();
+		
+		System.out.println("Enter the batch duration ( in months ) : ");
+		int duration = sc.nextInt();
+		
+		System.out.println("Enter the number of seats in this batch : ");
+		int seats = sc.nextInt();
+		
+		Batch batch = new Batch(bid, bname, duration, seats, cid);
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			System.out.println(ad.addBatchToCourse(batch));
+		}catch(AdminException ae) {
+			System.out.println(ae.getMessage());
+		}
+		
+	}
+
+	public void addStudentToBatch() {
+		
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Add Student To Batch ");
+		System.out.println("----------------------");
+		
+		System.out.println("Enter the Student Roll Number : ");
+		int roll = sc.nextInt();
+		
+		System.out.println("Enter Course ID : ");
+		int cid = sc.nextInt();
+		
+		System.out.println("Enter Batch ID : ");
+		int bid = sc.nextInt();
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			System.out.println(ad.addStudentToBatch(roll, bid, cid));
+			
+		} catch (AdminException e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		} 
+	}
+
+	public void updateSeats() {
+		
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Enter Batch ID : ");
+		int bid = sc.nextInt();
+		
+		System.out.println("Enter Updated Seats : ");
+		int newSeat = sc.nextInt();
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			System.out.println(ad.updateSeatsOfBatch(bid, newSeat));
+			
+		}catch(AdminException ae) {
+			
+			System.out.println(ae.getMessage());
+			
+		}
+
+	}
+
+	public void allStudentInBatch() {
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			List<StudentDTO> students = ad.showAllStudent();
+			
+			if(students.size() == 0) System.out.println("No Data Found");
+			else {
+				for(StudentDTO sd : students) {
+					System.out.println(sd);
+				}
+			}
+			
+		}catch(AdminException ae) {
+			System.out.println(ae.getMessage());
+		}
+	}
+	
+	public void studentList() {
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			List<Student> students = ad.studentList();
+			
+			for(Student s: students) {
+				System.out.println(s);
+			}
+			
+			if(students.size() == 0) System.out.println("No Student to Show");
+		}catch(AdminException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		
+		
+	}
+	
+	
 }

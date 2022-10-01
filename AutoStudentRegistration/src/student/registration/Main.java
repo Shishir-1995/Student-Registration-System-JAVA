@@ -18,28 +18,36 @@ public class Main {
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit The Application");
 		
-		int option = sc.nextInt();
-		StudentMenu student = new StudentMenu();
-		
-		switch(option){
-			case 0 : menu();
-				break;
-			case 2 : student.register();
+		try {
+			
+			int option = sc.nextInt();
+			StudentMenu student = new StudentMenu();
+			
+			switch(option){
+				case 0 : menu();
+					break;
+				case 2 : student.register();
+						studentAuth();
+					break;
+				case 1 : student.login();
+					studentActivity();
+					break;
+				case 3 : student.showAllCourse();
+					break;
+				case 99 :
+					System.out.println("Thank you for using Application");
+					break;
+				default : 
+					System.out.println("Invalid Selection ");
 					studentAuth();
-				break;
-			case 1 : student.login();
-				studentActivity();
-				break;
-			case 3 : student.showAllCourse();
-				break;
-			case 99 :
-				System.out.println("Thank you for using Application");
-				break;
-			default : 
-				System.out.println("Invalid Selection ");
-				studentAuth();
+			}
+			
+		}catch(Exception e) {
+			
+			System.out.println("Invalid Selection !");
+			studentAuth();
 		}
-		
+
 	}
 	
 	public static void studentActivity() {
@@ -50,20 +58,26 @@ public class Main {
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit the Application");
 		
-		int option = sc.nextInt();
-		StudentMenu student = new StudentMenu();
+		try {
 		
-		switch(option) {
-			case 0 : studentAuth();
-				break;
-			case 1 : student.updateDetail();
-				break;
-			case 99 :
-				System.out.println("Thank you for using Application");
-				break;
-			default : 
-				System.out.println("Invalid Selection ");
-				studentActivity();
+			int option = sc.nextInt();
+			StudentMenu student = new StudentMenu();
+			
+			switch(option) {
+				case 0 : studentAuth();
+					break;
+				case 1 : student.updateDetail();
+					break;
+				case 99 :
+					System.out.println("Thank you for using Application");
+					break;
+				default : 
+					System.out.println("Invalid Selection ");
+					studentActivity();
+			}
+		}catch(Exception e) {
+			System.out.println("Invalid Selection !");
+			studentActivity();
 		}
 	}
 	
@@ -75,6 +89,13 @@ public class Main {
 		System.out.println("\n\n");
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit The Application");
+		
+		try {
+			
+		}catch(Exception e) {
+			System.out.println("Invalid Selection !");
+			adminAuth();
+		}
 	}
 	
 	public static void menu() {
@@ -85,16 +106,25 @@ public class Main {
 		System.out.println("\n\n");
 		System.out.println("99. Exit the Application");
 		
-		int option = sc.nextInt();
 		
-		if(option == 1) {
-			studentAuth();
-		}else if(option == 2) {
-			adminAuth();
-		}else if(option == 99) {
-			System.out.println("Thank You for using Application.");
-		}else {
-			System.out.println("Invalid Selection : Please try again");
+		try {
+			
+			int option = sc.nextInt();		
+		
+			if(option == 1) {
+				studentAuth();
+			}else if(option == 2) {
+				adminAuth();
+			}else if(option == 99) {
+				System.out.println("Thank You for using Application.");
+			}else {
+				System.out.println("Invalid Selection : Please try again");
+				menu();
+			}
+		
+		
+		}catch(Exception e) {
+			System.out.println("Invalid Entry ! ");
 			menu();
 		}
 		

@@ -13,6 +13,7 @@ import stud.reg.bean.Batch;
 import stud.reg.bean.Course;
 import stud.reg.bean.CourseDTO;
 import stud.reg.bean.Student;
+import stud.reg.bean.StudentDTO;
 import stud.reg.exception.AdminException;
 import stud.reg.util.DBUtil;
 
@@ -320,9 +321,44 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
-	public List<Student> showAllStudent() throws AdminException {
+	public List<StudentDTO> showAllStudent() throws AdminException {
 		// TODO Auto-generated method stub
-		return null;
+		
+		List<StudentDTO> students = new ArrayList<>();
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("SELECT s.roll,s.name,c.c_id,c.c_name,b.bid,b.bname "
+					+ "FROM student s INNER JOIN batch b INNER JOIN course c INNER JOIN "
+					+ "student_batch sb ON c.c_id = sb.cid AND b.bid = sb.bid");
+			ResultSet rs = ps.executeQuery();
+			
+			boolean flag = true;
+			
+			while(rs.next()) {
+				
+				int roll = rs.getInt("roll");
+				String sName = rs.getString("name");
+				int cid = rs.getInt("c_id");
+				String cName = rs.getString("c_name");
+				int bid = rs.getInt("bid");
+				String bName = rs.getString("bname");
+				
+				StudentDTO student = new StudentDTO(roll, sName, cid, cName, bid, bName);
+				students.add(student);
+				
+			}
+			
+			if(flag) throw new AdminException("No student added to Batch");
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new AdminException(e.getMessage());
+			
+		}
+		
+		return students;
 	}
 
 	@Override
@@ -358,6 +394,44 @@ public class AdminDaoImpl implements AdminDao{
 		}
 		
 		return admin;
+	}
+
+	@Override
+	public List<Student> studentList() throws AdminException {
+		// TODO Auto-generated method stub
+		List<Student> students = new ArrayList<>();
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps =  conn.prepareStatement("SELECT * FROM student");
+		
+			ResultSet rs = ps.executeQuery();
+			
+			boolean flag = true;
+			
+			while(rs.next()) {
+				
+				flag = false;
+				int roll = rs.getInt("roll");
+				String name = rs.getString("name");
+				String gender= rs.getString("gender");
+				String email= rs.getString("email");
+				String pass= rs.getString("password");
+				
+				Student student = new Student(roll,name,gender,email,pass);
+				
+				students.add(student);
+			}
+			
+			if(flag) throw new AdminException("No Student Data Found !");
+			
+			
+		}catch (SQLException e) {
+			// TODO: handle exception
+			throw new AdminException(e.getMessage());
+		}
+		
+		return students;
 	}
 
 }
