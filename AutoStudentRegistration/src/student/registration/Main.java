@@ -34,6 +34,7 @@ public class Main {
 					studentActivity();
 					break;
 				case 3 : student.showAllCourse();
+					studentAuth();
 					break;
 				case 99 :
 					System.out.println("Thank you for using Application");
@@ -68,6 +69,7 @@ public class Main {
 				case 0 : studentAuth();
 					break;
 				case 1 : student.updateDetail();
+					studentActivity();
 					break;
 				case 99 :
 					System.out.println("Thank you for using Application");
