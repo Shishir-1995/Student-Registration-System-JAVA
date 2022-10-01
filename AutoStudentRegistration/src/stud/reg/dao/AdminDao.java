@@ -23,9 +23,11 @@ public interface AdminDao {
 	
 	List<CourseDTO> searchCourse(int cid) throws AdminException;
 	
-	String addStudentToBatch(int roll, int bid) throws AdminException;
+	String addStudentToBatch(int roll, int bid, int cid) throws AdminException;
 	
 	String updateSeatsOfBatch(int bid, int newSeats) throws AdminException;
 	
 	List<Student> showAllStudent() throws AdminException;
+	
+	Admin login(String username, String password) throws AdminException;
 }

@@ -31,8 +31,11 @@ FOREIGN KEY (cid) references Course(c_id) ON DELETE CASCADE ON UPDATE CASCADE
 
 CREATE TABLE student_batch(
 roll int,
+cid int,
 bid int,
+PRIMARY KEY (roll,cid),
 FOREIGN KEY (bid) references Batch(bid) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (cid) references Course(c_id) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (roll) references Student(roll) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

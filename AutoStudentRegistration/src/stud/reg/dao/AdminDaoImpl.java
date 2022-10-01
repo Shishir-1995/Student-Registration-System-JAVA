@@ -210,7 +210,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
-	public String addStudentToBatch(int roll, int bid) throws AdminException {
+	public String addStudentToBatch(int roll, int bid, int cid) throws AdminException {
 		// TODO Auto-generated method stub
 		String message = null;
 		
@@ -223,27 +223,73 @@ public class AdminDaoImpl implements AdminDao{
 			
 			if(rs.next()) {
 				
-				PreparedStatement ps2 =  conn.prepareStatement("SELECT * FROM batch WHERE bid = ?");
-				ps2.setInt(1, bid);
+				String studentName = rs.getString("name");
+				PreparedStatement ps2 =  conn.prepareStatement("SELECT * FROM course WHERE c_id = ?");
+				ps2.setInt(1, cid);
 				
 				ResultSet rs2 = ps2.executeQuery();
 				
 				if(rs2.next()) {
 					
-					conn.prepareStatement("SELECT ");
+					String courseName = rs2.getString("c_name");
+					PreparedStatement ps3 = conn.prepareStatement("SELECT bname,seats FROM batch WHERE bid = ? AND cid = ?");
+					ps3.setInt(1, bid);
+					ps3.setInt(2, cid);
 					
+					ResultSet rs3 = ps3.executeQuery();
+					
+					if(rs3.next()) {
+						
+						String batchName = rs3.getString("bname");
+						int batchSeats = rs3.getInt("seats");
+						
+						if(batchSeats > 0) {
+							
+							batchSeats--;
+							PreparedStatement up = conn.prepareStatement("UPDATE batch SET seats = ? WHERE bid = ?");
+							up.setInt(1, batchSeats);
+							up.setInt(2, bid);
+							
+							int r = up.executeUpdate();
+							
+							PreparedStatement p = conn.prepareStatement("INSERT INTO student_batch VALUES (?,?,?)");
+							p.setInt(1, roll);
+							p.setInt(2, cid);
+							p.setInt(3, bid);
+							
+							int res = p.executeUpdate();
+							
+							if(res > 0) {
+								
+								message = "Student "+studentName+" Added to Batch "+ batchName+" of Course "+courseName+" Successfully.";
+							
+							}
+							else {
+								throw new AdminException("Batch and Course Not Matching.");
+							}
+							
+							
+						}
+						else {
+							throw new AdminException("No Seats Available ! Add More Seats to Add more Student.");
+						}
+					}else {
+						throw new AdminException("Batch with Batch ID "+bid+" not Found !");
+					}
+
 				}else {
-					throw new AdminException("Batch Error !");
+					throw new AdminException("Course with course ID "+ cid + " not Found !");
 				}
 				
 			}else {
-				throw new AdminException("Student Error !");
+				throw new AdminException("Student with Roll number "+ roll+ " not Found !");
 			}
 			
-			
-		} catch (SQLException e) {
+		}
+		 catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new AdminException(e.getMessage());
 		}
 		
 		return message;
@@ -252,13 +298,66 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public String updateSeatsOfBatch(int bid, int newSeats) throws AdminException {
 		// TODO Auto-generated method stub
-		return null;
+		String message = null;
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps =  conn.prepareStatement("UPDATE batch SET seats = ? WHERE bid = ?");
+			ps.setInt(1, newSeats);
+			ps.setInt(2, bid);
+			
+			int res = ps.executeUpdate();
+			
+			if(res>0) message = "Batch ID : "+bid+" is Updated with Seats : "+ newSeats+" Successfully.";
+			else throw new AdminException("Batch ID Error.");
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new AdminException(e.getMessage());
+		}
+		return message;
 	}
 
 	@Override
 	public List<Student> showAllStudent() throws AdminException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Admin login(String username, String password) throws AdminException {
+		// TODO Auto-generated method stub
+		Admin admin = null;
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps =  conn.prepareStatement("SELECT * FROM admin WHERE a_user = ? AND a_pass = ?");
+			ps.setString(1, username);
+			ps.setString(2, password);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				
+				int id = rs.getInt(1);
+				String name = rs.getString(2);
+				String user = rs.getString(3);
+				String pass = rs.getString(4);
+				
+				admin = new Admin(id, name, user, pass);
+
+			}
+			else {
+				throw new AdminException("Authentication Error ! ");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new AdminException(e.getMessage());
+		}
+		
+		return admin;
 	}
 
 }

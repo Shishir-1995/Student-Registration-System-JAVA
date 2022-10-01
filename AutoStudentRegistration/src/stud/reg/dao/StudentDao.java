@@ -16,5 +16,7 @@ public interface StudentDao {
 	
 	List<CoursesDTO> showAllCourseDetails() throws StudentException;
 	
+	Student login(String username, String password) throws StudentException;
+	
 	
 }
