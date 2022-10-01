@@ -115,7 +115,7 @@ public class AdminDaoImpl implements AdminDao{
 			
 				PreparedStatement ps = con.prepareStatement("SELECT b.seats,b.bname,c.c_name,c.fee,c.c_id "
 															+ "FROM batch b INNER JOIN course c "
-															+ "ON b.cid = c.c_id AND c.c_id= (?);");
+															+ "ON b.cid = c.c_id AND c.c_id= (?)");
 				ps.setInt(1, cid);
 				
 				ResultSet rs = ps.executeQuery();
@@ -168,7 +168,7 @@ public class AdminDaoImpl implements AdminDao{
 			
 			int res = ps.executeUpdate();
 			
-			if(res > 0) message = "Course ID : "+cid+" Updated Fees : "+newFee;
+			if(res > 0) message = "Course ID : "+cid+" New Fees : "+newFee;
 			else throw new AdminException("Error Updating Fee ! Check Course ID. ");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
