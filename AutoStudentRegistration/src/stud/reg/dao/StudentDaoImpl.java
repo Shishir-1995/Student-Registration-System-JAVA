@@ -108,7 +108,7 @@ public class StudentDaoImpl implements StudentDao{
 		
 		try(Connection con = DBUtil.establishConnection()){
 			
-			PreparedStatement ps =  con.prepareStatement("SELECT c.c_name,sum(b.seats) FROM batch b "
+			PreparedStatement ps =  con.prepareStatement("SELECT c.c_id,c.c_name,sum(b.seats) FROM batch b "
 					+ "INNER JOIN course c ON c.c_id = b.cid GROUP BY c.c_id");
 			
 			ResultSet rs = ps.executeQuery();
@@ -117,12 +117,13 @@ public class StudentDaoImpl implements StudentDao{
 			
 			while(rs.next()) {
 				
-				String name = rs.getString(1);
-				int totalFees = rs.getInt(2);
+				int cid = rs.getInt(1);
+				String name = rs.getString(2);
+				int totalFees = rs.getInt(3);
 				
 				flag = false;
 				
-				CoursesDTO course = new CoursesDTO(name, totalFees);
+				CoursesDTO course = new CoursesDTO(cid, name, totalFees);
 				
 				courses.add(course);
 			}
@@ -135,6 +136,41 @@ public class StudentDaoImpl implements StudentDao{
 		}
 
 		return courses;
+	}
+
+	@Override
+	public Student login(String username, String password) throws StudentException {
+		// TODO Auto-generated method stub
+		Student student = null;
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps =  conn.prepareStatement("SELECT * FROM student WHERE email = ? AND password = ?");
+			ps.setString(1,username);
+			ps.setString(2,password);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				int roll = rs.getInt("roll");
+				String name = rs.getString("name");
+				String gender = rs.getString("gender");
+				String email = rs.getString("email");
+				String pass = rs.getString("password");
+				
+				student = new Student(roll,name,gender,email,pass);
+			}else {
+				throw new StudentException("Student Not Found");
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new StudentException(e.getMessage());
+		}
+		
+		
+		return student;
 	}
 
 	

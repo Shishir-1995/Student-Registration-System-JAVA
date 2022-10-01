@@ -2,15 +2,25 @@ package stud.reg.bean;
 
 public class CoursesDTO {
 	
+	private int cid;
 	private String cname;
 	private int seats;
 	
 	public CoursesDTO() {}
 
-	public CoursesDTO(String cname, int seats) {
+	public CoursesDTO(int cid,String cname, int seats) {
 		super();
+		this.cid = cid;
 		this.cname = cname;
 		this.seats = seats;
+	}
+
+	public int getCid() {
+		return cid;
+	}
+
+	public void setCid(int cid) {
+		this.cid = cid;
 	}
 
 	public String getCname() {
@@ -31,7 +41,7 @@ public class CoursesDTO {
 
 	@Override
 	public String toString() {
-		return "Course Name : "+this.cname+"\nTotal Seats Available : "+this.seats;
+		return "Course ID : "+this.cid+"\nCourse Name : "+this.cname+"\nTotal Seats Available : "+this.seats;
 	};
 	
 	
