@@ -57,7 +57,19 @@ public class AdminMenu {
 		String name = sc.nextLine();
 		
 		System.out.println("Course Fee : ");
-		int fee = sc.nextInt();
+		
+		String f;
+		int fee = 0;
+		try {
+			f = sc.next();
+			fee = Integer.parseInt(f);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addCourse();
+		}
+		
 		
 		Course course = new Course();
 		course.setCname(name);
@@ -76,10 +88,31 @@ public class AdminMenu {
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Enter Course ID : ");
-		int cid = sc.nextInt();
+		String c;
+		int cid = 0;
+		
+		try {
+			c = sc.next();
+			cid = Integer.parseInt(c);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			updateFee();
+		}
 		
 		System.out.println("Enter New Fees : ");
-		int fee = sc.nextInt();
+		String f;
+		int fee = 0;
+		try {
+			f = sc.next();
+			fee = Integer.parseInt(f);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			updateFee();
+		}
 		
 		AdminDao ad = new AdminDaoImpl();
 		
@@ -97,7 +130,18 @@ public class AdminMenu {
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Enter Course ID : ");
-		int cid = sc.nextInt();
+		String c;
+		int cid = 0;
+		
+		try {
+			c = sc.next();
+			cid = Integer.parseInt(c);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			deleteCourse();
+		}
 		
 		AdminDao ad = new AdminDaoImpl();
 		
@@ -115,7 +159,18 @@ public class AdminMenu {
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Enter the course ID : ");
-		int cid = sc.nextInt();
+		String c;
+		int cid = 0;
+		
+		try {
+			c = sc.next();
+			cid = Integer.parseInt(c);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			searchCourse();
+		}
 		
 		AdminDao ad = new AdminDaoImpl();
 		
@@ -123,9 +178,9 @@ public class AdminMenu {
 			
 			List<CourseDTO> courses = ad.searchCourse(cid);
 			
-			for(CourseDTO c: courses) {
+			for(CourseDTO cd: courses) {
 				
-				System.out.println(c);
+				System.out.println(cd);
 				
 				System.out.println("----------------------------------------");
 				
@@ -151,16 +206,49 @@ public class AdminMenu {
 		System.out.println("--------------------------");
 		
 		System.out.println("Enter the Course ID of the batch : ");
-		int cid = sc.nextInt();
+		String c;
+		int cid = 0;
+		
+		try {
+			c = sc.next();
+			cid = Integer.parseInt(c);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addBatchToCourse();
+		}
 		
 		System.out.println("Enter the Batch ID (Must be Unique) : ");
-		int bid = sc.nextInt();
+		String b;
+		int bid = 0;
+		
+		try {
+			b = sc.next();
+			bid = Integer.parseInt(b);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addBatchToCourse();
+		}
 		
 		System.out.println("Enter the batch name : ");
 		String bname = sc.next();
 		
 		System.out.println("Enter the batch duration ( in months ) : ");
-		int duration = sc.nextInt();
+		String d;
+		int duration = 0;
+		
+		try {
+			d = sc.next();
+			duration = Integer.parseInt(d);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addBatchToCourse();
+		}
 		
 		System.out.println("Enter the number of seats in this batch : ");
 		int seats = sc.nextInt();
@@ -186,13 +274,46 @@ public class AdminMenu {
 		System.out.println("----------------------");
 		
 		System.out.println("Enter the Student Roll Number : ");
-		int roll = sc.nextInt();
+		String r;
+		int roll = 0;
+		
+		try {
+			r = sc.next();
+			roll = Integer.parseInt(r);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addStudentToBatch();
+		}
 		
 		System.out.println("Enter Course ID : ");
-		int cid = sc.nextInt();
+		String c;
+		int cid = 0;
+		
+		try {
+			c = sc.next();
+			cid = Integer.parseInt(c);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addStudentToBatch();
+		}
 		
 		System.out.println("Enter Batch ID : ");
-		int bid = sc.nextInt();
+		String b;
+		int bid = 0;
+		
+		try {
+			b = sc.next();
+			bid = Integer.parseInt(b);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			addStudentToBatch();
+		}
 		
 		AdminDao ad = new AdminDaoImpl();
 		
@@ -211,10 +332,34 @@ public class AdminMenu {
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Enter Batch ID : ");
-		int bid = sc.nextInt();
+		String b;
+		int bid = 0;
+		
+		try {
+			b = sc.next();
+			bid = Integer.parseInt(b);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			updateSeats();
+			
+		}
 		
 		System.out.println("Enter Updated Seats : ");
-		int newSeat = sc.nextInt();
+		String ns;
+		int newSeat = 0;
+		
+		try {
+			ns = sc.next();
+			newSeat = Integer.parseInt(ns);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			updateSeats();
+			
+		};
 		
 		AdminDao ad = new AdminDaoImpl();
 		
@@ -241,6 +386,7 @@ public class AdminMenu {
 			else {
 				for(StudentDTO sd : students) {
 					System.out.println(sd);
+					System.out.println("----------------------------");
 				}
 			}
 			
@@ -258,6 +404,7 @@ public class AdminMenu {
 			
 			for(Student s: students) {
 				System.out.println(s);
+				System.out.println("------------------------");
 			}
 			
 			if(students.size() == 0) System.out.println("No Student to Show");
@@ -266,6 +413,56 @@ public class AdminMenu {
 		}
 		
 		
+		
+	}
+	
+	public int login() {
+		
+		int check = 0;
+		
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Enter Username : ");
+		String userName = sc.next();
+		
+		System.out.println("Enter Password : ");
+		String password = sc.next();
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			Admin admin = ad.login(userName, password);
+			
+			System.out.println(admin);
+			
+			check = 1;
+			
+		}catch(AdminException e){
+			
+			System.out.println(e.getMessage());
+		}
+		
+		return check;
+		
+	}
+	
+	public void showCourse() {
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			
+			List<Course> courses =  ad.courseList();
+			for(Course c: courses) {
+				System.out.println(c);
+				System.out.println("-----------------------");
+			}
+		}catch (AdminException e) {
+			// TODO: handle exception
+			
+			System.out.println(e.getMessage());
+		}
 		
 	}
 	

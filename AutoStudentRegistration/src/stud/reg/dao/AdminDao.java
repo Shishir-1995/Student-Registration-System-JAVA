@@ -33,4 +33,7 @@ public interface AdminDao {
 	Admin login(String username, String password) throws AdminException;
 	
 	List<Student> studentList() throws AdminException;
+	
+	List<Course> courseList() throws AdminException;
+	
 }
