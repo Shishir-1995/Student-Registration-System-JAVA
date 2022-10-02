@@ -343,6 +343,8 @@ public class AdminDaoImpl implements AdminDao{
 				String cName = rs.getString("c_name");
 				int bid = rs.getInt("bid");
 				String bName = rs.getString("bname");
+				flag = false;
+				
 				
 				StudentDTO student = new StudentDTO(roll, sName, cid, cName, bid, bName);
 				students.add(student);
@@ -432,6 +434,44 @@ public class AdminDaoImpl implements AdminDao{
 		}
 		
 		return students;
+	}
+
+	@Override
+	public List<Course> courseList() throws AdminException {
+		// TODO Auto-generated method stub
+		List<Course> courses = new ArrayList<>();
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM course");
+			
+			ResultSet rs = ps.executeQuery();
+			
+			boolean flag = true;
+			
+			while(rs.next()) {
+				int cid = rs.getInt("c_id");
+				String cname = rs.getString("c_name");
+				int fee = rs.getInt("fee");
+				flag = false;
+				Course course = new Course(cid,cname,fee);
+				
+				courses.add(course);
+			}
+			
+			if(flag) throw new AdminException("No Course Found !");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new AdminException(e.getMessage());
+		}
+		
+		
+		
+		
+		return courses;
+	
+	
 	}
 
 }

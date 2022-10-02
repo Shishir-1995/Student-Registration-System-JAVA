@@ -33,7 +33,18 @@ public class StudentMenu {
 		String password = sc.next();
 		
 		System.out.println("Enter Course ID :");
-		int cid = sc.nextInt();
+		String c;
+		int cid = 0;
+		
+		try {
+			c = sc.next();
+			cid = Integer.parseInt(c);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Try Again !");
+			register();
+		}
 		
 		student.setName(name);
 		student.setGender(gender);
@@ -52,7 +63,10 @@ public class StudentMenu {
 		}
 	}
 	
-	public void login() {
+	public int login() {
+		
+		int check = 0;
+		
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Enter Your email (case sensitive)");
@@ -71,11 +85,16 @@ public class StudentMenu {
 			System.out.println("----------------------------");
 			System.out.println(student);
 			
+			check = student.getRoll();
+			
 		} catch (StudentException e) {
 			// TODO: handle exception
 			
 			System.out.println(e.getMessage());
 		}
+		
+		return check;
+		
 	}
 	
 	public void showAllCourse() {
@@ -100,14 +119,15 @@ public class StudentMenu {
 		}
 	}
 	
-	public void updateDetail() {
+	public void updateDetail(int rollNumber) {
 		
-Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Update Detail ");
 		
-		System.out.println("Enter your roll number : ");
-		int roll = sc.nextInt();
+//		System.out.println("Enter your roll number : ");
+//		int roll = sc.nextInt();
+		int roll = rollNumber;
 		
 		System.out.println("Select field to update (name/gender/email/password): ");
 		String field = sc.next();
