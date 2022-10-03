@@ -4,6 +4,7 @@ import java.util.List;
 
 import stud.reg.bean.Admin;
 import stud.reg.bean.Batch;
+import stud.reg.bean.BatchDTO;
 import stud.reg.bean.Course;
 import stud.reg.bean.CourseDTO;
 import stud.reg.bean.Student;
@@ -35,5 +36,7 @@ public interface AdminDao {
 	List<Student> studentList() throws AdminException;
 	
 	List<Course> courseList() throws AdminException;
+	
+	List<BatchDTO> batchList() throws AdminException;
 	
 }

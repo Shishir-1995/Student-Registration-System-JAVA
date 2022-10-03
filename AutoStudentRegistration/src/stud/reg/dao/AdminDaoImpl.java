@@ -10,6 +10,7 @@ import java.util.List;
 
 import stud.reg.bean.Admin;
 import stud.reg.bean.Batch;
+import stud.reg.bean.BatchDTO;
 import stud.reg.bean.Course;
 import stud.reg.bean.CourseDTO;
 import stud.reg.bean.Student;
@@ -62,7 +63,27 @@ public class AdminDaoImpl implements AdminDao{
 			int res = ps.executeUpdate();
 			
 			if(res > 0) {
+				
+				PreparedStatement psx = conn.prepareStatement("SELECT * FROM course WHERE c_name = ? AND fee = ?");
+				psx.setString(1, course.getCname());
+				psx.setInt(2, course.getFee());
+				
+				ResultSet rsx = psx.executeQuery();
+				
+				if(rsx.next()) {
+					int cid = rsx.getInt(1);
+					String cname = rsx.getString(2);
+					int fee = rsx.getInt(3);
+					
+					Course c = new Course(cid,cname,fee);
+					
+					System.out.println(c);
+					System.out.println("================================");
+				}
+				
+				
 				message = "Course Added Successfully";
+				System.out.println("====================================");
 			}else {
 				throw new AdminException("Error Adding Course Details");
 			}
@@ -88,8 +109,9 @@ public class AdminDaoImpl implements AdminDao{
 			int res = ps.executeUpdate();
 			
 			if(res>0) message = "Course Removed Successfully";
-			else throw new AdminException("Course ID Error! Not Found");
 			
+			else throw new AdminException("Course ID Error! Not Found");
+			System.out.println("------------------------------------");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -163,13 +185,36 @@ public class AdminDaoImpl implements AdminDao{
 		
 		try(Connection conn = DBUtil.establishConnection()){
 			
-			PreparedStatement ps = conn.prepareStatement("UPDATE course SET fee = ? WHERE cid = ?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE course SET fee = ? WHERE c_id = ?");
 			ps.setInt(1, newFee);
 			ps.setInt(2, cid);
 			
 			int res = ps.executeUpdate();
 			
-			if(res > 0) message = "Course ID : "+cid+" New Fees : "+newFee;
+			if(res > 0) {
+				
+				PreparedStatement psx = conn.prepareStatement("SELECT * FROM course WHERE c_id = ?");
+				psx.setInt(1, cid);
+//				psx.setInt(2, course.getFee());
+				
+				ResultSet rsx = psx.executeQuery();
+				
+				if(rsx.next()) {
+					int c_id = rsx.getInt(1);
+					String cname = rsx.getString(2);
+					int fee = rsx.getInt(3);
+					
+					Course c = new Course(c_id,cname,fee);
+					
+					System.out.println(c);
+					System.out.println("================================");
+				}
+				
+				
+				
+				
+				message = "Course ID : "+cid+" New Fees : "+newFee;
+			}
 			else throw new AdminException("Error Updating Fee ! Check Course ID. ");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -330,7 +375,7 @@ public class AdminDaoImpl implements AdminDao{
 			
 			PreparedStatement ps = conn.prepareStatement("SELECT s.roll,s.name,c.c_id,c.c_name,b.bid,b.bname "
 					+ "FROM student s INNER JOIN batch b INNER JOIN course c INNER JOIN "
-					+ "student_batch sb ON c.c_id = sb.cid AND b.bid = sb.bid");
+					+ "student_batch sb ON c.c_id = sb.cid AND b.bid = sb.bid AND s.roll = sb.roll");
 			ResultSet rs = ps.executeQuery();
 			
 			boolean flag = true;
@@ -438,6 +483,7 @@ public class AdminDaoImpl implements AdminDao{
 
 	@Override
 	public List<Course> courseList() throws AdminException {
+
 		// TODO Auto-generated method stub
 		List<Course> courses = new ArrayList<>();
 		
@@ -472,6 +518,47 @@ public class AdminDaoImpl implements AdminDao{
 		return courses;
 	
 	
+	}
+	
+
+	@Override
+	
+	public List<BatchDTO> batchList() throws AdminException {
+		// TODO Auto-generated method stub
+		List<BatchDTO> batches = new ArrayList<>();
+		
+		try(Connection conn = DBUtil.establishConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("SELECT b.bid, b.bname,b.seats, c.c_name FROM batch b INNER JOIN course c ON c.c_id = b.cid");
+			ResultSet rs = ps.executeQuery();
+			
+			boolean flag = true;
+			
+			while(rs.next()) {
+				int bid = rs.getInt(1);
+				String bname = rs.getString(2);
+				int seats = rs.getInt(3);
+				String cname = rs.getString(4);
+				flag = false;
+				
+				
+				BatchDTO bd = new BatchDTO(bid,bname,seats,cname);
+				
+				batches.add(bd);
+				
+			}
+			
+			if(flag) throw new AdminException("Please Add Batches");
+			
+			
+			
+		}catch(SQLException e) {
+			throw new AdminException(e.getMessage());
+		}
+		
+		
+		
+		return batches;
 	}
 
 }

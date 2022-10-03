@@ -19,9 +19,11 @@ public class Main {
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit The Application");
 		
+		int option = 0;
 		try {
 			
-			int option = sc.nextInt();
+			String opt = sc.next();
+			option = Integer.parseInt(opt);
 			StudentMenu student = new StudentMenu();
 			
 			switch(option){
@@ -42,18 +44,19 @@ public class Main {
 					break;
 				case 99 :
 					System.out.println("Thank you for using Application");
+					sc.close();
 					break;
 				default : 
-					System.out.println("Invalid Selection ");
+					System.err.println("Option Not in Menu");
 					System.out.println("----------------------------------------");
 					studentAuth();
 			}
 			
 		}catch(Exception e) {
 			
-			System.out.println("Invalid Selection !");
+			System.err.println("Please! Select a number.");
 			System.out.println("----------------------------------------");
-			menu();
+			studentAuth();
 		}
 
 	}
@@ -66,10 +69,12 @@ public class Main {
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit the Application");
 		
+		int option = 0;
+		
 		try {
 		
 			String opt = sc.next();
-			int option = Integer.parseInt(opt);
+			option = Integer.parseInt(opt);
 			
 			StudentMenu student = new StudentMenu();
 			
@@ -82,52 +87,58 @@ public class Main {
 					break;
 				case 99 :
 					System.out.println("Thank you for using Application");
+					sc.close();
 					break;
 				default : 
-					System.out.println("Invalid Selection ");
+					System.err.println("Choose from the Options ");
 					System.out.println("----------------------------------------");
 					studentActivity(roll);
 			}
 		}catch(Exception e) {
-			System.out.println("Invalid Selection !");
+			System.err.println("Please! choose a number.");
 			System.out.println("----------------------------------------");
-			menu();
+			studentActivity(roll);
 		}
 	}
 	
 	public static void adminAuth() {
 		
 		System.out.println("PLEASE SELECT FROM THE FOLLOWING OPTIONS ");
-		System.out.println("1. New Admin Registration");
-		System.out.println("2. Admin Login");
+		System.out.println("1. Admin Login");
+//		System.out.println("2. New Admin Registration");
 		System.out.println("\n\n");
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit The Application");
 		
 		AdminMenu am = new AdminMenu();
 		
+		int option = 0;
+		
 		try {
-			int option = sc.nextInt();
+			
+			String opt = sc.next();
+			option = Integer.parseInt(opt);
 			switch(option) {
 			case 0: menu();
 				break;
-			case 1: am.register();
-				adminAuth();
-				break;
-			case 2: int check = am.login();
+			case 1: int check = am.login();
 				if(check == 1) adminActivity();
 				else adminAuth();
 				break;
+//			case 2: am.register();
+//			adminAuth();
+//			break;
 			case 99 :
 				System.out.println("Thank you for using Application");
+				sc.close();
 				break;
 			default : 
-				System.out.println("Invalid Selection ");
+				System.err.println("Please Select From the Option ");
 				adminAuth();
 			}
 			
 		}catch(Exception e) {
-			System.out.println("Invalid Selection !");
+			System.err.println("Choose a Number !");
 			System.out.println("----------------------------------------");
 			adminAuth();
 		}
@@ -147,45 +158,63 @@ public class Main {
 		System.out.println("8. View Student in Batch");
 		System.out.println("9. View All Student List");
 		System.out.println("10. View All Course List");
+		System.out.println("11. View All Batch List");
 		System.out.println("\n\n");
 		System.out.println("0. Go Back");
 		System.out.println("99. Exit The Application");
 		
 		AdminMenu am = new AdminMenu();
+		int option = 0;
 		try {
 			
-			int option = sc.nextInt();
+			String opt = sc.next();
+		
+			option = Integer.parseInt(opt);
+			
+
+			
 			switch(option) {
 				case 0 : adminAuth();
 					break;
-				case 1 : am.addCourse();
+				case 1 :
+					am.addCourse();
 					adminActivity();
 					break;
 				case 2:
+					am.showCourse();
 					am.updateFee();
 					adminActivity();
 					break;
 				case 3:
+					am.showCourse();
 					am.deleteCourse();
 					adminActivity();
 					break;
 				case 4:am.searchCourse(); adminActivity(); break;
-				case 5:am.addBatchToCourse(); adminActivity(); break;
-				case 6:am.addStudentToBatch(); adminActivity(); break;
+				case 5:
+					am.showCourse();
+					am.addBatchToCourse(); adminActivity(); break;
+				case 6:
+	
+					am.addStudentToBatch(); adminActivity(); break;
 				case 7:am.updateSeats(); adminActivity(); break;
 				case 8:am.allStudentInBatch(); adminActivity(); break;
 				case 9:am.studentList(); adminActivity(); break;
 				case 10:am.showCourse(); adminActivity(); break;
+				case 11: am.showAllBatch();adminActivity();break;
 				case 99:
 					System.out.println("Thank you for using Application");
+					sc.close();
 					break;
-				default:System.out.println("Invalid Selection !");
+				default:System.err.println("Choose From the Options");
 					adminActivity();
 			}
 			
 			
+			
 		}catch(Exception e) {
-			System.out.println("Invalid Exception");
+			System.err.println(option + " is not a valid Response!");
+			System.out.println(e.getMessage());
 			System.out.println("----------------------------------------");
 			adminActivity();
 		}
@@ -214,14 +243,15 @@ public class Main {
 				adminAuth();
 			}else if(option == 99) {
 				System.out.println("Thank You for using Application.");
+				sc.close();
 			}else {
-				System.out.println("Invalid Selection : Please try again");
+				System.err.println("Option Not in menu.");
 				menu();
 			}
 		
 		
 		}catch(Exception e) {
-			System.out.println("Invalid Entry ! ");
+			System.err.println("Please! Choose a number. ");
 			System.out.println("----------------------------------------");
 			menu();
 		}

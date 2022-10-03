@@ -9,10 +9,7 @@ public class Student {
 	private String password;
 	
 	public Student() {};
-	
-	
-	
-	
+
 	public Student(int roll, String name, String gender, String email, String password) {
 		super();
 		this.roll = roll;
@@ -21,9 +18,6 @@ public class Student {
 		this.email = email;
 		this.password = password;
 	}
-
-
-
 
 	public int getRoll() {
 		return roll;
@@ -55,9 +49,6 @@ public class Student {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-
-
 
 	@Override
 	public String toString() {

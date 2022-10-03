@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import stud.reg.bean.Admin;
 import stud.reg.bean.Batch;
+import stud.reg.bean.BatchDTO;
 import stud.reg.bean.Course;
 import stud.reg.bean.CourseDTO;
 import stud.reg.bean.Student;
@@ -27,7 +28,7 @@ public class AdminMenu {
 		
 		System.out.println("Enter username : ");
 		String user = sc.next();
-		
+
 		System.out.println("Enter Password : ");
 		String pass = sc.next();
 		
@@ -39,7 +40,9 @@ public class AdminMenu {
 		AdminDao ad = new AdminDaoImpl();
 		
 		try {
+			
 			System.out.println(ad.adminRegistration(admin));
+			
 		}catch (AdminException ae) {
 
 			System.out.println(ae.getMessage());
@@ -76,6 +79,8 @@ public class AdminMenu {
 		course.setFee(fee);
 		
 		AdminDao ad = new AdminDaoImpl();
+		
+		
 		
 		try {
 			System.out.println(ad.addCourse(course));
@@ -462,6 +467,23 @@ public class AdminMenu {
 			// TODO: handle exception
 			
 			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	public void showAllBatch() {
+		
+		AdminDao ad = new AdminDaoImpl();
+		
+		try {
+			List<BatchDTO> batches = ad.batchList();
+			
+			for(BatchDTO bd : batches) {
+				System.out.println(bd);
+				System.out.println("------------------------");
+			}
+		}catch(AdminException ae) {
+			System.err.println(ae.getMessage());
 		}
 		
 	}
